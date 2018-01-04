@@ -19,7 +19,7 @@ class XML_UA(ContentHandler):
         self.misdatos = {}
 
     def startElement(self, name, attrs):
-		"Recoge los datos contenidos en las etiquetas"
+		#Recoge los datos contenidos en las etiquetas
         dat_atrib = {}
         account = ['username', 'passwd']
         uaserver = ['ip', 'puerto']
@@ -37,11 +37,11 @@ class XML_UA(ContentHandler):
             self.misdatos[name] = dat_atrib
 
     def get_tags(self):
-        "Devuelve los datos del XML"
+        #Devuelve los datos del XML
         return self.misdatos
 
 def WriteinFile(fichlog, mensaje):
-    "Escribe en el fichero de registro"
+    #Escribe en el fichero de registro
     gmt = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time())) + ' '
     M = mensaje.split('\r\n')
     S = ' '.join(M)
@@ -85,17 +85,28 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 break
 
 if __name__ == "__main__":
-    # Creamos servidor de eco y escuchamos
-    try:
-        fichero_audio = sys.argv[3]
-        if not os.path.isfile(fichero_audio):
-            sys.exit("No se encuentra el fichero de audio: " + fichero_audio)
-        else:
-            IP = sys.argv[1]
-            PUERTO = int(sys.argv[2])
-            serv = socketserver.UDPServer((IP, PUERTO), EchoHandler)
-    except IndexError:
-        sys.exit("Usage: python3 server.py IP puerto fichero_audio")
-
-    print("Listening...")
-    serv.serve_forever()
+   # Creamos servidor de eco y escuchamos
+	try:
+		parser = make_parser()
+		cHandler = XML_UA()
+		parser.setContentHandler(cHandler)
+		parser.parse(open(sys.argv[1]))
+		DatosUA_XML = cHandler.get_tags()
+		SIP_SERVER = DatosUA_XML['account']['username']
+		PASSWORD_SERVER = DatosUA_XML['account']['passwd']
+		IP_SERVER = DatosUA_XML['uaserver']['ip']
+		PUERTO_SERVER = int(DatosUA_XML['uaserver']['puerto'])
+		IP_PROXY = DatosUA_XML['regproxy']['ip']
+		PUERTO_PROXY = int(DatosUA_XML['regproxy']['puerto'])
+		FicheroLog = DatosUA_XML['log']['path']
+		WriteinFile(FicheroLog, "Listening...")
+		
+	except IndexError:
+		sys.exit("Usage: python3 uaserver.py config")
+	except FileNotFoundError:
+		sys.exit("El archivo: " + sys.argv[1] + " no existe")
+	serv = socketserver.UDPServer((IP_SERVER, PUERTO_SERVER), 		EchoHandler)
+	
+	print("Listening...")	        
+	serv.serve_forever()
+	

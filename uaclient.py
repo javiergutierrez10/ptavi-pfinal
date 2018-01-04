@@ -21,7 +21,7 @@ try:
 	parser.parse(open(sys.argv[1]))
 	DatosUA_XML = cHandler.get_tags()
 	FicheroLog = DatosUA_XML['log']['path']
-	WriteinFile(FicheroLog, 'Starting....')
+	WriteinFile(FicheroLog, "Starting....")
 	
 except IndexError:
     
@@ -39,21 +39,26 @@ PUERTO_PROXY = int(DatosUA_XML['regproxy']['puerto'])
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
-    my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    my_socket.connect((IP_PROXY, PUERTO_PROXY))
+	my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	my_socket.connect((IP_PROXY, PUERTO_PROXY))
 
-    print()
-#    print("Enviando: " + LINE)
-#    my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+	print()
+	if METHOD == "REGISTER":
+		LINE = METHOD + " sip:" + SIP_CLIENT + ":" + PUERTO_CLIENT + 			" SIP/2.0\r\nExpires: " + OPCION
+	
+	WriteinFile(FicheroLog, "Sent to " + str(IP_PROXY) + ":" + str(PUERTO_PROXY) + ": " + LINE)
+	print("Enviando: " + LINE)
+	my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 
-    data = my_socket.recv(1024)
+	data = my_socket.recv(1024)
 
-    print("Recibido:", data.decode('utf-8'))
+	print("Recibido:", data.decode('utf-8'))
 
-    if METHOD == "INVITE":
-        LINE = "ACK sip:" + SIPNAME_SERVER + "@" + IP_SERVER + " SIP/2.0\r\n"
-        my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-        print("Enviando: " + LINE)
+	if METHOD == "INVITE":
+		LINE = "ACK sip:" + SIPNAME_SERVER + "@" + IP_SERVER + " SIP/2.0\r\n"
+	
+	my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+	print("Enviando: " + LINE)
 
-print("Terminando...")
-print("Fin.")
+	print("Terminando...")
+	print("Fin.")
