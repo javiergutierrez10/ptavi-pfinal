@@ -10,6 +10,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import os
 import time
+from proxy_registrar import WriteinFile
         
 class XML_UA(ContentHandler):
     "Clase de manejo XML"
@@ -30,6 +31,7 @@ class XML_UA(ContentHandler):
         etiquetas = {'account': account, 'uaserver': uaserver, 'rtpaudio':
                      rtpaudio, 'regproxy': regproxy, 'log': log, 'audio':
                      audio}
+                     
         if name in etiquetas:
             for atributo in etiquetas[name]:
                 if attrs.get(atributo, "") != "":
@@ -39,15 +41,6 @@ class XML_UA(ContentHandler):
     def get_tags(self):
         #Devuelve los datos del XML
         return self.misdatos
-
-def WriteinFile(fichlog, mensaje):
-    #Escribe en el fichero de registro
-    gmt = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time())) + ' '
-    M = mensaje.split('\r\n')
-    S = ' '.join(M)
-    outfile = open(fichlog, 'a')
-    outfile.write(gmt + S + '\n')
-    outfile.close()
 
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
@@ -108,5 +101,9 @@ if __name__ == "__main__":
 	serv = socketserver.UDPServer((IP_SERVER, PUERTO_SERVER), 		EchoHandler)
 	
 	print("Listening...")	        
-	serv.serve_forever()
+	
+	try:      
+		serv.serve_forever()
+	except KeyboardInterrupt:
+		print("Finishing servidor")
 	

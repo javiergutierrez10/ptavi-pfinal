@@ -7,7 +7,7 @@ import socket
 import sys
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
-from uaserver import WriteinFile
+from proxy_registrar import WriteinFile
 import uaserver
 import time
 
@@ -45,15 +45,17 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
 	print()
 	if METHOD == "REGISTER":
 		LINE = METHOD + " sip:" + SIP_CLIENT + ":" + PUERTO_CLIENT + 			" SIP/2.0\r\nExpires: " + OPCION
-	
-	WriteinFile(FicheroLog, "Sent to " + str(IP_PROXY) + ":" + str(PUERTO_PROXY) + ": " + LINE)
-	print("Enviando: " + LINE)
-	my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+	try:
+		WriteinFile(FicheroLog, "Sent to " + str(IP_PROXY) + ":" + str(PUERTO_PROXY) + ": " + LINE)
+		print("Enviando: " + LINE)
+		my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 
-	data = my_socket.recv(1024)
-
-	print("Recibido:", data.decode('utf-8'))
-
+		data = my_socket.recv(1024)
+		print("Recibido:", data.decode('utf-8'))
+	except ConnectionRefusedError:
+		WriteinFile(FicheroLog, "Error: No server listening at " + IP_PROXY + "port " + str(PUERTO_PROXY))
+		sys.exit("Error: No server listening")
+		
 	if METHOD == "INVITE":
 		LINE = "ACK sip:" + SIPNAME_SERVER + "@" + IP_SERVER + " SIP/2.0\r\n"
 	
