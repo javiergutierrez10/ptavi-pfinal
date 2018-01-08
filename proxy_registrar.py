@@ -9,6 +9,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import time
 import socketserver
+import random
 
 def WriteinFile(fichlog, mensaje):
     #Escribe en el fichero de registro
@@ -55,23 +56,25 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
     def handle(self):
 
         Borrar_Cliente = False
+        Autorizacion = False
         """
         handle method of the server class
         (all requests will be handled by this method)
         """
-        self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
         line = self.rfile.read()
         mensaje = line.decode('utf-8')
         expires = int(mensaje.split(' ')[3])
         ip_cliente = self.client_address[0]
         puerto_cliente = self.client_address[1]
-        print("El cliente con IP:" + str(ip_cliente))
-        print(" y Puerto:" + str(puerto_cliente) + " nos manda", mensaje)
-
+        print("El cliente con IP:" + str(ip_cliente) + " y Puerto:" + str(puerto_cliente) + " nos manda", mensaje)
+        comprob = mensaje.split(" ")[-1]
         if line.decode('utf-8').split(' ')[0] == "REGISTER":
             name_cliente = line.decode('utf-8').split(' ')[1]
-            if len(self.clientes) == 0 and expires != 0:
-                self.clientes[name_cliente] = ip_cliente
+            if len(self.clientes) == 0 and expires != 0 and not Autorizacion:
+                numero = str(random.randint(1,999999999999999999))
+                self.wfile.write(b"SIP/2.0 401 Unauthorized\r\nWWW Authenticate: Digest nonce=" + bytes('"' + numero + '"','utf-8'))
+            elif len(self.clientes) == 0 and expires != 0 and Autorizacion:
+            	print("HOLAAAA")    
             elif len(self.clientes) != 0:
                 for nombre in self.clientes:
                     if name_cliente == nombre and expires != 0:
@@ -81,13 +84,15 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                         Borrar_Cliente = True
                         break
                     elif name_cliente != nombre and expires != 0:
-                        self.clientes[name_cliente] = ip_cliente
+#                        self.clientes[name_cliente] = ip_cliente
+                        self.wfile.write(b"SIP/2.0 401 Unauthorized\r\n\r\n")  
                         break
 
-            if Borrar_Cliente is True:
-                del self.clientes[name_cliente]
+        if Borrar_Cliente is True:
+            del self.clientes[name_cliente]
 
-            print(self.clientes)    
+        print(self.clientes)
+          
 if __name__ == "__main__":
    # Creamos servidor de eco y escuchamos
 	try:
