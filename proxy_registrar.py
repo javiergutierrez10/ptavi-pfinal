@@ -70,11 +70,15 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         comprob = mensaje.split(" ")[-1]
         if line.decode('utf-8').split(' ')[0] == "REGISTER":
             name_cliente = line.decode('utf-8').split(' ')[1]
+            try:
+            	comprobar = int(comprob)
+            except ValueError:
+            	Autorizacion = True
             if len(self.clientes) == 0 and expires != 0 and not Autorizacion:
                 numero = str(random.randint(1,999999999999999999))
                 self.wfile.write(b"SIP/2.0 401 Unauthorized\r\nWWW Authenticate: Digest nonce=" + bytes('"' + numero + '"','utf-8'))
             elif len(self.clientes) == 0 and expires != 0 and Autorizacion:
-            	print("HOLAAAA")    
+            	self.clientes[name_cliente] = ip_cliente
             elif len(self.clientes) != 0:
                 for nombre in self.clientes:
                     if name_cliente == nombre and expires != 0:
@@ -84,7 +88,6 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                         Borrar_Cliente = True
                         break
                     elif name_cliente != nombre and expires != 0:
-#                        self.clientes[name_cliente] = ip_cliente
                         self.wfile.write(b"SIP/2.0 401 Unauthorized\r\n\r\n")  
                         break
 
