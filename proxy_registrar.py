@@ -50,15 +50,15 @@ class XML_PR(ContentHandler):
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
-
     """
     Echo server class
     """
-    clientes = {}
+    clientes = []
 
     def handle(self):
 
-        Borrar_Cliente = False
+        if len(self.clientes) != 0:
+            self.ExpiracionClientes()
         Autorizacion = False
         """
         handle method of the server class
@@ -74,39 +74,52 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
               " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
         comprob = mensaje.split(" ")[-1]
         if metodo == "REGISTER":
-            expires = int(opcion)
+            expir = int(opcion)
             name_cliente = line.decode('utf-8').split(':')[1]
             name_cliente = name_cliente.split(':')[0]
             try:
                 comprobar = int(comprob)
             except ValueError:
                 Autorizacion = True
-            if len(self.clientes) == 0 and expires != 0 and not Autorizacion:
+
+            registertime = time.strftime("%Y-%m-%d %H:%M:%S",
+                                         time.gmtime(time.time() + 3600))
+            expiratime = time.strftime("%Y-%m-%d %H:%M:%S",
+                                       time.gmtime(time.time() + 3600 + expir))
+            cliente = [name_cliente, {"IP": ip_cliente,
+                                      "Puerto": puerto_cliente,
+                                      "Expires": expir,
+                                      "Expiration": expiratime,
+                                      "Register": registertime}]
+
+            if len(self.clientes) == 0 and expir != 0 and not Autorizacion:
                 numero = str(random.randint(1, 999999999999999999))
-                self.wfile.write(b"SIP/2.0 401 Unauthorized\r\nWWW Authenticate: Digest nonce=" + bytes('"' + numero + '"', 'utf-8'))
+                aut = 'WWW Authenticate: Digest nonce="' + numero + '"'
+                self.wfile.write(b"SIP/2.0 401 Unauthorized\r\n" +
+                                 bytes(aut, 'utf-8'))
                 WriteinFile(FicheroLog, "SIP/2.0 401 Unauthorized")
-            elif len(self.clientes) == 0 and expires != 0 and Autorizacion:
-                self.clientes[name_cliente] = ip_cliente
+            elif len(self.clientes) == 0 and expir != 0 and Autorizacion:
+                self.clientes.append(cliente)
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
-            elif len(self.clientes) != 0 and expires != 0 and Autorizacion:
-                self.clientes[name_cliente] = ip_cliente
+            elif len(self.clientes) != 0 and expir != 0 and Autorizacion:
+                self.clientes.append(cliente)
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
             elif len(self.clientes) != 0:
                 for nombre in self.clientes:
-                    if name_cliente == nombre and expires != 0:
+                    if nombre[0] == name_cliente and expir != 0:
                         print("El cliente ya está registrado\r\n")
                         break
-                    elif name_cliente == nombre and expires == 0:
-                        Borrar_Cliente = True
+                    elif nombre[0] == name_cliente and expir == 0:
+                        self.wfile.write(b"SIP/2.0 200 OK\r\n")
+                        self.clientes.remove(nombre)
                         break
-                    elif name_cliente != nombre and expires != 0:
+                    elif nombre[0] != name_cliente and expir != 0:
                         numero = str(random.randint(1, 999999999999999999))
-                        self.wfile.write(b"SIP/2.0 401 Unauthorized\r\nWWW Authenticate: Digest nonce=" + bytes('"' + numero + '"', 'utf-8'))
+                        aut = 'WWW Authenticate: Digest nonce="' + numero + '"'
+                        self.wfile.write(b"SIP/2.0 401 Unauthorized\r\n" +
+                                         bytes(aut, 'utf-8'))
                         WriteinFile(FicheroLog, "SIP/2.0 401 Unauthorized")
                         break
-
-            if Borrar_Cliente is True:
-                del self.clientes[name_cliente]
 
             print(self.clientes)
 
@@ -120,7 +133,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                     ipinvitado = self.clientes[user]
                     ipanfitr = mensaje.split(" ")[5]
                     puertoanfitr = mensaje.split(" ")[9]
-                    self.wfile.write(b"SIP/2.0 100 Trying\r\nSIP/2.0 180 Ringing\r\nSIP/2.0 200 OK\r\n")
+                    self.wfile.write(b"SIP/2.0 100 Trying\r\nSIP/2.0 180" +
+                                     b" Ringing\r\nSIP/2.0 200 OK\r\n")
                     WriteinFile(FicheroLog, "SIP/2.0 100 Trying" +
                                 "SIP/2.0 180 Ringing SIP/2.0 200 OK")
                     break
@@ -133,6 +147,12 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         else:
             self.wfile.write(b"SIP/2.0 400 Bad Request\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 400 Bad Request")
+
+    def ExpiracionClientes(self):
+        gmt = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time() + 3600))
+        for nombre in self.clientes:
+            if nombre[1]["Expiration"] < gmt:
+                self.clientes.remove(nombre)
 
 
 if __name__ == "__main__":
