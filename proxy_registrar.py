@@ -10,6 +10,7 @@ from xml.sax import make_parser
 import time
 import socketserver
 import random
+import os
 
 
 def WriteinFile(fichlog, mensaje):
@@ -57,8 +58,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 
     def handle(self):
 
-        if len(self.clientes) != 0:
-            self.ExpiracionClientes()
+        self.ExpiracionClientes()
         Autorizacion = False
         """
         handle method of the server class
@@ -73,6 +73,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         print("El cliente con IP:" + str(ip_cliente) +
               " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
         comprob = mensaje.split(" ")[-1]
+
         if metodo == "REGISTER":
             expir = int(opcion)
             name_cliente = line.decode('utf-8').split(':')[1]
@@ -82,9 +83,9 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             except ValueError:
                 Autorizacion = True
 
-            registertime = time.strftime("%Y-%m-%d %H:%M:%S",
+            registertime = time.strftime("%Y%m%d%H%M%S",
                                          time.gmtime(time.time() + 3600))
-            expiratime = time.strftime("%Y-%m-%d %H:%M:%S",
+            expiratime = time.strftime("%Y%m%d%H%M%S",
                                        time.gmtime(time.time() + 3600 + expir))
             cliente = [name_cliente, {"IP": ip_cliente,
                                       "Puerto": puerto_cliente,
@@ -127,12 +128,19 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             user = mensaje.split(":")[1]
             user = user.split(" ")[0]
             userinclients = False
-            for nombre in self.clientes:
-                if user == nombre:
+            for cliente in self.clientes:
+                if user == cliente[0]:
                     userinclients = True
-                    ipinvitado = self.clientes[user]
-                    ipanfitr = mensaje.split(" ")[5]
-                    puertoanfitr = mensaje.split(" ")[9]
+                    ipinvitado = cliente[1]["IP"]
+                    puertoinvitado = cliente[1]["Puerto"]
+                    with socket.socket(socket.AF_INET,
+                                       socket.SOCK_DGRAM) as my_socket:
+                        my_socket.setsockopt(socket.SOL_SOCKET,
+                                             socket.SO_REUSEADDR, 1)
+                        my_socket.connect((ipinvitado, puertoinvitado))
+                        print("Enviando:\r\n" + mensaje)
+                        my_socket.send(bytes(mensaje, 'utf-8') + b'\r\n')
+                        data = my_socket.recv(1024)
                     self.wfile.write(b"SIP/2.0 100 Trying\r\nSIP/2.0 180" +
                                      b" Ringing\r\nSIP/2.0 200 OK\r\n")
                     WriteinFile(FicheroLog, "SIP/2.0 100 Trying" +
@@ -149,9 +157,11 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             WriteinFile(FicheroLog, "SIP/2.0 400 Bad Request")
 
     def ExpiracionClientes(self):
-        gmt = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time() + 3600))
+        gmt = time.strftime("%Y%m%d%H%M%S", time.gmtime(time.time() + 3600))
         for nombre in self.clientes:
             if nombre[1]["Expiration"] < gmt:
+                print(nombre[1]["Expiration"])
+                print(gmt)
                 self.clientes.remove(nombre)
 
 
