@@ -73,7 +73,6 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         print("El cliente con IP:" + str(ip_cliente) +
               " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
         comprob = mensaje.split(" ")[-1]
-
         if metodo == "REGISTER":
             expir = int(opcion)
             name_cliente = line.decode('utf-8').split(':')[1]
@@ -87,8 +86,10 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                                          time.gmtime(time.time() + 3600))
             expiratime = time.strftime("%Y%m%d%H%M%S",
                                        time.gmtime(time.time() + 3600 + expir))
+            puertoesccliente = mensaje.split(':')[2]
+            puertoesccliente = puertoesccliente.split(' ')[0]
             cliente = [name_cliente, {"IP": ip_cliente,
-                                      "Puerto": puerto_cliente,
+                                      "Puerto": puertoesccliente,
                                       "Expires": expir,
                                       "Expiration": expiratime,
                                       "Register": registertime}]
@@ -127,6 +128,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         elif metodo == "INVITE":
             user = mensaje.split(":")[1]
             user = user.split(" ")[0]
+            ipultinvite = mensaje.split(" ")[5]
+            puertoultinvite = mensaje.split(" ")[9]
             userinclients = False
             for cliente in self.clientes:
                 if user == cliente[0]:
@@ -137,19 +140,22 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                                        socket.SOCK_DGRAM) as my_socket:
                         my_socket.setsockopt(socket.SOL_SOCKET,
                                              socket.SO_REUSEADDR, 1)
-                        my_socket.connect((ipinvitado, puertoinvitado))
+                        my_socket.connect((ipinvitado, int(puertoinvitado)))
                         print("Enviando:\r\n" + mensaje)
                         my_socket.send(bytes(mensaje, 'utf-8') + b'\r\n')
                         data = my_socket.recv(1024)
-                    self.wfile.write(b"SIP/2.0 100 Trying\r\nSIP/2.0 180" +
-                                     b" Ringing\r\nSIP/2.0 200 OK\r\n")
-                    WriteinFile(FicheroLog, "SIP/2.0 100 Trying" +
-                                "SIP/2.0 180 Ringing SIP/2.0 200 OK")
+                        mensajeresp = data.decode('utf-8')
+                        print("Recibido:")
+                        print(mensajeresp)
+                        print("Enviando:")
+                        print(mensajeresp)
+                    self.wfile.write(bytes(mensajeresp, 'utf-8'))
+                    WriteinFile(FicheroLog, mensajeresp)
                     break
             if not userinclients:
                 self.wfile.write(b"SIP/2.0 404 User Not Found\r\n")
                 WriteinFile(FicheroLog, "SIP/2.0 404 User Not Found")
-        elif metodo != "REGISTER" and metodo != "INVITE":
+        elif metodo != "REGISTER" and metodo != "INVITE" and okey != "SIP/2.0":
             self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 405 Method Not Allowed")
         else:
