@@ -67,13 +67,14 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         line = self.rfile.read()
         mensaje = line.decode('utf-8')
         metodo = mensaje.split(' ')[0]
-        opcion = mensaje.split(' ')[3]
-        ip_cliente = self.client_address[0]
-        puerto_cliente = self.client_address[1]
-        print("El cliente con IP:" + str(ip_cliente) +
-              " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
-        comprob = mensaje.split(" ")[-1]
+
         if metodo == "REGISTER":
+            opcion = mensaje.split(' ')[3]
+            ip_cliente = self.client_address[0]
+            puerto_cliente = self.client_address[1]
+            print("El cliente con IP:" + str(ip_cliente) +
+                  " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
+            comprob = mensaje.split(" ")[-1]
             expir = int(opcion)
             name_cliente = line.decode('utf-8').split(':')[1]
             name_cliente = name_cliente.split(':')[0]
@@ -126,6 +127,12 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             print(self.clientes)
 
         elif metodo == "INVITE":
+            opcion = mensaje.split(' ')[3]
+            ip_cliente = self.client_address[0]
+            puerto_cliente = self.client_address[1]
+            print("El cliente con IP:" + str(ip_cliente) +
+                  " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
+            comprob = mensaje.split(" ")[-1]
             user = mensaje.split(":")[1]
             user = user.split(" ")[0]
             ipultinvite = mensaje.split(" ")[5]
@@ -155,6 +162,33 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             if not userinclients:
                 self.wfile.write(b"SIP/2.0 404 User Not Found\r\n")
                 WriteinFile(FicheroLog, "SIP/2.0 404 User Not Found")
+        elif metodo == "ACK":
+            ip_cliente = self.client_address[0]
+            puerto_cliente = self.client_address[1]
+            print("El cliente con IP:" + str(ip_cliente) +
+                  " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
+
+            user = mensaje.split(":")[1]
+            user = user.split(" ")[0]
+
+            userinclients = False
+            for cliente in self.clientes:
+                if user == cliente[0]:
+                    userinclients = True
+                    ipinvitado = cliente[1]["IP"]
+                    puertoinvitado = cliente[1]["Puerto"]
+                    with socket.socket(socket.AF_INET,
+                                       socket.SOCK_DGRAM) as my_socket:
+                        my_socket.setsockopt(socket.SOL_SOCKET,
+                                             socket.SO_REUSEADDR, 1)
+                        my_socket.connect((ipinvitado, int(puertoinvitado)))
+                        print("Enviando:\r\n" + mensaje)
+                        my_socket.send(bytes(mensaje, 'utf-8') + b'\r\n')
+                    break
+            if not userinclients:
+                self.wfile.write(b"SIP/2.0 404 User Not Found\r\n")
+                WriteinFile(FicheroLog, "SIP/2.0 404 User Not Found")
+
         elif metodo != "REGISTER" and metodo != "INVITE" and okey != "SIP/2.0":
             self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 405 Method Not Allowed")

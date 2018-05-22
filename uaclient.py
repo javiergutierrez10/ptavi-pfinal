@@ -61,6 +61,15 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         print("Recibido:")
         mensajeresp = data.decode('utf-8')
         print(mensajeresp)
+
+        correcto = "SIP/2.0 100 Trying\r\n"
+        correcto += "SIP/2.0 180 Ringing\r\nSIP/2.0 200 OK\r\n"
+        confirmacion = mensajeresp.split("Content")[0]
+        if confirmacion == correcto:
+            LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n\r\n"
+            print("Enviando:\r\n" + LINE)
+            my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+
     except ConnectionRefusedError:
         WriteinFile(FicheroLog, "Error: No server listening at " +
                     IP_PROXY + "port " + str(PUERTO_PROXY))
@@ -80,8 +89,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         print(mensajeresp)
     elif METHOD == "INVITE":
         data = my_socket.recv(1024)
-        print("Recibido:")
         mensajeresp = data.decode('utf-8')
+        print("Recibido:")
         print(mensajeresp)
+
     print("Terminando...")
     print("Fin.")

@@ -58,10 +58,10 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         print(mensaje)
         method = mensaje.split(' ')[0]
         methods = ["INVITE", "BYE", "ACK"]
-        SIP_ANFI = mensaje.split('=')[2]
-        SIP_ANFI = SIP_ANFI.split(' ')[0]
         if method in methods:
             if method == "INVITE":
+                SIP_ANFI = mensaje.split('=')[2]
+                SIP_ANFI = SIP_ANFI.split(' ')[0]
                 LINE = "SIP/2.0 100 Trying\r\n"
                 LINE = LINE + "SIP/2.0 180 Ringing\r\n"
                 LINE = LINE + "SIP/2.0 200 OK\r\n"
@@ -101,6 +101,7 @@ if __name__ == "__main__":
         IP_PROXY = DatosUA_XML['regproxy']['ip']
         PUERTO_PROXY = int(DatosUA_XML['regproxy']['puerto'])
         FicheroLog = DatosUA_XML['log']['path']
+        fichero_audio = DatosUA_XML['audio']['path']
         WriteinFile(FicheroLog, "Listening...")
 
     except IndexError:
