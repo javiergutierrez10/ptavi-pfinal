@@ -75,14 +75,20 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 self.wfile.write(bytes(LINE, 'utf-8'))
                 print("Enviando:\r\n" + LINE)
             elif method == "ACK":
-                aEjecutar = "mp32rtp -i 127.0.0.1 -p 23032 < " + fichero_audio
+                aEjecutar = "./mp32rtp -i 127.0.0.1 -p 6789 < cancion.mp3"
                 print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
+            elif method == "BYE":
+                os.system("killall mp32rtp 2> /dev/null")
+                LINE = "SIP/2.0 200 OK\r\n"
+                self.wfile.write(bytes(LINE, 'utf-8'))
+                print("Enviando:\r\n" + LINE)
             else:
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
         elif method not in methods:
             self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n")
         else:
+            print(method)
             self.wfile.write(b"SIP/2.0 400 Bad Request\r\n")
 
 

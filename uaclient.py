@@ -5,6 +5,7 @@ Programa cliente que abre un socket a un servidor
 """
 import socket
 import sys
+import os
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 from proxy_registrar import WriteinFile
@@ -49,6 +50,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         T = "t=0 \r\n"
         M = "m=audio " + str(PUERTO_CLIENT) + " RTP \r\n"
         LINE = LINE + V + o + S + T + M
+    elif METHOD == "BYE":
+        LINE = METHOD + " sip:" + OPCION + " SIP/2.0\r\n"
+        os.system("killall mp32rtp 2> /dev/null")
     else:
         LINE = METHOD + " sip:" + SIP_CLIENT + ":" + PUERTO_CLIENT
         LINE = LINE + " SIP/2.0\r\nExpires: " + OPCION
@@ -57,6 +61,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
                     + str(PUERTO_PROXY) + ": " + LINE)
         print("Enviando:\r\n" + LINE)
         my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+
         data = my_socket.recv(1024)
         print("Recibido:")
         mensajeresp = data.decode('utf-8')
@@ -66,7 +71,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         correcto += "SIP/2.0 180 Ringing\r\nSIP/2.0 200 OK\r\n"
         confirmacion = mensajeresp.split("Content")[0]
         if confirmacion == correcto:
-            LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n\r\n"
+            LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n"
             print("Enviando:\r\n" + LINE)
             my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 

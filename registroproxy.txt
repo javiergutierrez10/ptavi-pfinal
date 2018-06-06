@@ -1,0 +1,137 @@
+20180522102757 Listening...
+20180522102808 SIP/2.0 401 Unauthorized
+20180522102811 SIP/2.0 401 Unauthorized
+20180522102815 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522103021 Listening...
+20180522103033 SIP/2.0 401 Unauthorized
+20180522103037 SIP/2.0 401 Unauthorized
+20180522103041 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522103334 Listening...
+20180522103344 SIP/2.0 401 Unauthorized
+20180522103347 SIP/2.0 401 Unauthorized
+20180522103353 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522103543 Listening...
+20180522103551 SIP/2.0 404 User Not Found
+20180522103555 SIP/2.0 401 Unauthorized
+20180522103558 SIP/2.0 401 Unauthorized
+20180522103600 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522104437 Listening...
+20180522104447 SIP/2.0 401 Unauthorized
+20180522104452 SIP/2.0 401 Unauthorized
+20180522104455 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522104725 Listening...
+20180522104735 SIP/2.0 401 Unauthorized
+20180522104739 SIP/2.0 401 Unauthorized
+20180522104741 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522105127 Listening...
+20180522105140 SIP/2.0 401 Unauthorized
+20180522105144 SIP/2.0 401 Unauthorized
+20180522105148 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522105414 Listening...
+20180522105425 SIP/2.0 401 Unauthorized
+20180522105428 SIP/2.0 401 Unauthorized
+20180522105431 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522105722 Listening...
+20180522105731 SIP/2.0 401 Unauthorized
+20180522105737 SIP/2.0 401 Unauthorized
+20180522105741 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180522110034 Listening...
+20180522110047 SIP/2.0 401 Unauthorized
+20180522110051 SIP/2.0 401 Unauthorized
+20180522110058 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606104052 Listening...
+20180606104158 SIP/2.0 401 Unauthorized
+20180606104204 SIP/2.0 401 Unauthorized
+20180606104215 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606104338 Listening...
+20180606104350 SIP/2.0 401 Unauthorized
+20180606104351 SIP/2.0 401 Unauthorized
+20180606104354 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606104434 Listening...
+20180606104441 SIP/2.0 401 Unauthorized
+20180606104442 SIP/2.0 401 Unauthorized
+20180606104445 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606104838 Listening...
+20180606104847 SIP/2.0 401 Unauthorized
+20180606104848 SIP/2.0 401 Unauthorized
+20180606104849 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606105344 Listening...
+20180606105350 SIP/2.0 401 Unauthorized
+20180606105352 SIP/2.0 401 Unauthorized
+20180606105354 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606105429 Listening...
+20180606105439 SIP/2.0 401 Unauthorized
+20180606105441 SIP/2.0 401 Unauthorized
+20180606105458 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606111121 Listening...
+20180606111303 SIP/2.0 401 Unauthorized
+20180606111309 SIP/2.0 401 Unauthorized
+20180606111316 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606111518 Listening...
+20180606111527 SIP/2.0 401 Unauthorized
+20180606111528 SIP/2.0 401 Unauthorized
+20180606111531 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606111607 Listening...
+20180606111614 SIP/2.0 401 Unauthorized
+20180606111616 SIP/2.0 401 Unauthorized
+20180606111619 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606111759 Listening...
+20180606111805 SIP/2.0 400 Bad Request
+20180606111805 SIP/2.0 400 Bad Request
+20180606111811 SIP/2.0 401 Unauthorized
+20180606111813 SIP/2.0 401 Unauthorized
+20180606111818 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606111827 SIP/2.0 400 Bad Request
+20180606111827 SIP/2.0 400 Bad Request
+20180606112155 Listening...
+20180606112204 SIP/2.0 401 Unauthorized
+20180606112205 SIP/2.0 401 Unauthorized
+20180606112207 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180606112216 SIP/2.0 400 Bad Request
+20180606112300 SIP/2.0 400 Bad Request
+20180606112309 Listening...
+20180606112324 SIP/2.0 401 Unauthorized
+20180606112325 SIP/2.0 401 Unauthorized
+20180606112328 SIP/2.0 400 Bad Request
+20180606112512 Listening...
+20180606112521 SIP/2.0 401 Unauthorized
+20180606112522 SIP/2.0 401 Unauthorized
+20180606112525 SIP/2.0 400 Bad Request
+20180606112546 Listening...
+20180606112604 SIP/2.0 401 Unauthorized
+20180606112605 SIP/2.0 401 Unauthorized
+20180606112607 SIP/2.0 400 Bad Request
+20180606112836 Listening...
+20180606112844 SIP/2.0 401 Unauthorized
+20180606112846 SIP/2.0 401 Unauthorized
+20180606112847 SIP/2.0 400 Bad Request
+20180606112901 SIP/2.0 400 Bad Request
+20180606112908 Listening...
+20180606112919 SIP/2.0 401 Unauthorized
+20180606112920 SIP/2.0 401 Unauthorized
+20180606113026 Listening...
+20180606113036 SIP/2.0 401 Unauthorized
+20180606113038 SIP/2.0 401 Unauthorized
+20180606113402 Listening...
+20180606113408 SIP/2.0 401 Unauthorized
+20180606113410 SIP/2.0 401 Unauthorized
+20180606113526 Listening...
+20180606113537 SIP/2.0 401 Unauthorized
+20180606113538 SIP/2.0 401 Unauthorized
+20180606113641 Listening...
+20180606113649 SIP/2.0 401 Unauthorized
+20180606113650 SIP/2.0 401 Unauthorized
+20180606113753 Listening...
+20180606113800 SIP/2.0 401 Unauthorized
+20180606113801 SIP/2.0 401 Unauthorized
+20180606113835 Listening...
+20180606113840 SIP/2.0 401 Unauthorized
+20180606113841 SIP/2.0 401 Unauthorized
+20180606114108 Listening...
+20180606114113 SIP/2.0 401 Unauthorized
+20180606114114 SIP/2.0 401 Unauthorized
+20180606114126 Listening...
+20180606114158 Listening...
+20180606114206 SIP/2.0 401 Unauthorized
+20180606114208 SIP/2.0 401 Unauthorized
+20180606114215 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  

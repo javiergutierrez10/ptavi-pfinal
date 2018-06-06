@@ -188,14 +188,40 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             if not userinclients:
                 self.wfile.write(b"SIP/2.0 404 User Not Found\r\n")
                 WriteinFile(FicheroLog, "SIP/2.0 404 User Not Found")
+        elif metodo == "BYE":
+            ip_cliente = self.client_address[0]
+            puerto_cliente = self.client_address[1]
+            print("El cliente con IP:" + str(ip_cliente) +
+                  " y Puerto:" + str(puerto_cliente) + " nos manda:", mensaje)
 
-        elif metodo != "REGISTER" and metodo != "INVITE" and okey != "SIP/2.0":
+            user = mensaje.split(":")[1]
+            user = user.split(" ")[0]
+
+            userinclients = False
+            for cliente in self.clientes:
+                if user == cliente[0]:
+                    userinclients = True
+                    ipinvitado = cliente[1]["IP"]
+                    puertoinvitado = cliente[1]["Puerto"]
+                    with socket.socket(socket.AF_INET,
+                                       socket.SOCK_DGRAM) as my_socket:
+                        my_socket.setsockopt(socket.SOL_SOCKET,
+                                             socket.SO_REUSEADDR, 1)
+                        my_socket.connect((ipinvitado, int(puertoinvitado)))
+                        print("Enviando:\r\n" + mensaje)
+                        my_socket.send(bytes(mensaje, 'utf-8') + b'\r\n')
+                        self.wfile.write(b"SIP/2.0 200 OK\r\n")
+                    break
+            if not userinclients:
+                self.wfile.write(b"SIP/2.0 404 User Not Found\r\n")
+                WriteinFile(FicheroLog, "SIP/2.0 404 User Not Found")
+
+        elif metodo != "REGISTER" and metodo != "INVITE" and metodo != "BYE":
             self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 405 Method Not Allowed")
         else:
             self.wfile.write(b"SIP/2.0 400 Bad Request\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 400 Bad Request")
-
     def ExpiracionClientes(self):
         gmt = time.strftime("%Y%m%d%H%M%S", time.gmtime(time.time() + 3600))
         for nombre in self.clientes:
