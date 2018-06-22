@@ -31,6 +31,9 @@ IP_CLIENT = DatosUA_XML['uaserver']['ip']
 PUERTO_CLIENT = DatosUA_XML['uaserver']['puerto']
 IP_PROXY = DatosUA_XML['regproxy']['ip']
 PUERTO_PROXY = int(DatosUA_XML['regproxy']['puerto'])
+PUERTO_RTP = int(DatosUA_XML['rtpaudio']['puerto'])
+fichero_audio = DatosUA_XML['audio']['path']
+IP_SERVER = "127.0.0.1"
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
@@ -48,7 +51,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         o = "o=" + SIP_CLIENT + " " + IP_CLIENT + " \r\n"
         S = "s=misesion \r\n"
         T = "t=0 \r\n"
-        M = "m=audio " + str(PUERTO_CLIENT) + " RTP \r\n"
+        M = "m=audio " + str(PUERTO_RTP) + " RTP \r\n"
         LINE = LINE + V + o + S + T + M
     elif METHOD == "BYE":
         LINE = METHOD + " sip:" + OPCION + " SIP/2.0\r\n"
@@ -74,7 +77,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
             LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n"
             print("Enviando:\r\n" + LINE)
             my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-
+            os.system("./mp32rtp -i " + IP_SERVER + " -p 23032 < " + fichero_audio)
+            print('Starting rtp transmission...')
     except ConnectionRefusedError:
         WriteinFile(FicheroLog, "Error: No server listening at " +
                     IP_PROXY + "port " + str(PUERTO_PROXY))
@@ -94,9 +98,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         print(mensajeresp)
     elif METHOD == "INVITE":
         data = my_socket.recv(1024)
-        mensajeresp = data.decode('utf-8')
-        print("Recibido:")
-        print(mensajeresp)
+        print("Transmisión RTP finalizada")
 
     print("Terminando...")
     print("Fin.")

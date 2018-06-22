@@ -70,12 +70,12 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 o = "o=" + SIP_SERVER + " " + str(IP_SERVER) + " \r\n"
                 S = "s=misesion \r\n"
                 T = "t=0 \r\n"
-                M = "m=audio " + str(PUERTO_SERVER) + " RTP \r\n"
+                M = "m=audio " + str(PUERTO_RTP) + " RTP \r\n"
                 LINE = LINE + V + o + S + T + M
                 self.wfile.write(bytes(LINE, 'utf-8'))
                 print("Enviando:\r\n" + LINE)
             elif method == "ACK":
-                aEjecutar = "./mp32rtp -i 127.0.0.1 -p 6789 < cancion.mp3"
+                aEjecutar = "./mp32rtp -i 127.0.0.1 -p 32023 < " + fichero_audio
                 print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
             elif method == "BYE":
@@ -106,6 +106,7 @@ if __name__ == "__main__":
         PUERTO_SERVER = int(DatosUA_XML['uaserver']['puerto'])
         IP_PROXY = DatosUA_XML['regproxy']['ip']
         PUERTO_PROXY = int(DatosUA_XML['regproxy']['puerto'])
+        PUERTO_RTP = int(DatosUA_XML['rtpaudio']['puerto'])
         FicheroLog = DatosUA_XML['log']['path']
         fichero_audio = DatosUA_XML['audio']['path']
         WriteinFile(FicheroLog, "Listening...")

@@ -135,3 +135,7 @@
 20180606114206 SIP/2.0 401 Unauthorized
 20180606114208 SIP/2.0 401 Unauthorized
 20180606114215 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
+20180610093714 Listening...
+20180610093825 SIP/2.0 401 Unauthorized
+20180610093854 SIP/2.0 401 Unauthorized
+20180610094014 SIP/2.0 100 Trying SIP/2.0 180 Ringing SIP/2.0 200 OK Content-Type: application/sdp v=0  o=penny@girlnextdoor.com 127.0.0.1  s=misesion  t=0  m=audio 6789 RTP  
