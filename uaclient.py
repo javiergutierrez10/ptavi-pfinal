@@ -86,6 +86,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
 # Esperamos respuesta
 
     if METHOD == "REGISTER" and mensajeresp.split(" ")[1] == "401":
+        WriteinFile(FicheroLog, "Received from " + IP_PROXY + ":" +
+                    PUERTO_PROXY + " SIP/2.0 401 Unauthorized")
+
         numero = mensajeresp.split('"')[1]
         autorizacion = " \r\nAuthorization: Digest response="
         autorizacion = autorizacion + '"' + str(numero) + '"'

@@ -107,6 +107,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
             elif len(self.clientes) != 0 and expir != 0 and Autorizacion:
                 self.clientes.append(cliente)
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
+                WriteinFile(FicheroLog, "SIP/2.0 200 OK")
             elif len(self.clientes) != 0:
                 for nombre in self.clientes:
                     if nombre[0] == name_cliente and expir != 0:
