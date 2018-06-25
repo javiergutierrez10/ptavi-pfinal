@@ -49,6 +49,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
     """
+    PUERTO_RTP_ANFI = []
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
@@ -60,6 +61,9 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         methods = ["INVITE", "BYE", "ACK"]
         if method in methods:
             if method == "INVITE":
+                rtp_puerto = mensaje.split("m=audio ")[1]
+                rtp_puerto = rtp_puerto.split(" ")[0]
+                self.PUERTO_RTP_ANFI.append(rtp_puerto)
                 SIP_ANFI = mensaje.split('=')[2]
                 SIP_ANFI = SIP_ANFI.split(' ')[0]
                 LINE = "SIP/2.0 100 Trying\r\n"
@@ -75,7 +79,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 self.wfile.write(bytes(LINE, 'utf-8'))
                 print("Enviando:\r\n" + LINE)
             elif method == "ACK":
-                aEjecutar = "./mp32rtp -i 127.0.0.1 -p 32023 < " + fichero_audio
+                aEjecutar = "./mp32rtp -i 127.0.0.1 -p " + self.PUERTO_RTP_ANFI[0] + " < " + fichero_audio
                 print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
             elif method == "BYE":

@@ -74,10 +74,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         correcto += "SIP/2.0 180 Ringing\r\nSIP/2.0 200 OK\r\n"
         confirmacion = mensajeresp.split("Content")[0]
         if confirmacion == correcto:
+            PUERTO_RTP_INVITADO = mensajeresp.split("m=audio ")[1]
+            PUERTO_RTP_INVITADO = PUERTO_RTP_INVITADO.split(" ")[0]
             LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n"
             print("Enviando:\r\n" + LINE)
             my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-            os.system("./mp32rtp -i " + IP_SERVER + " -p 23032 < " + fichero_audio)
+            os.system("./mp32rtp -i " + IP_SERVER + " -p" + 
+                        PUERTO_RTP_INVITADO + " < " + fichero_audio)
             print('Starting rtp transmission...')
     except ConnectionRefusedError:
         WriteinFile(FicheroLog, "Error: No server listening at " +
@@ -86,8 +89,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
 # Esperamos respuesta
 
     if METHOD == "REGISTER" and mensajeresp.split(" ")[1] == "401":
-        WriteinFile(FicheroLog, "Received from " + IP_PROXY + ":" +
-                    PUERTO_PROXY + " SIP/2.0 401 Unauthorized")
+        WriteinFile(FicheroLog, "Received from " + str(IP_PROXY) + ":" +
+                    str(PUERTO_PROXY) + " SIP/2.0 401 Unauthorized")
 
         numero = mensajeresp.split('"')[1]
         autorizacion = " \r\nAuthorization: Digest response="
