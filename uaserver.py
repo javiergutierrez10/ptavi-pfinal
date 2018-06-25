@@ -79,7 +79,9 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 self.wfile.write(bytes(LINE, 'utf-8'))
                 print("Enviando:\r\n" + LINE)
             elif method == "ACK":
-                aEjecutar = "./mp32rtp -i 127.0.0.1 -p " + self.PUERTO_RTP_ANFI[0] + " < " + fichero_audio
+                aEjecutar = "./mp32rtp -i 127.0.0.1 -p "
+                aEjecutar = aEjecutar + self.PUERTO_RTP_ANFI[0]
+                aEjecutar = aEjecutar + " < " + fichero_audio
                 print("Vamos a ejecutar", aEjecutar)
                 os.system(aEjecutar)
             elif method == "BYE":

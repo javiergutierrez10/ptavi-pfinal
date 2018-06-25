@@ -60,8 +60,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
         LINE = METHOD + " sip:" + SIP_CLIENT + ":" + PUERTO_CLIENT
         LINE = LINE + " SIP/2.0\r\nExpires: " + OPCION
     try:
-        WriteinFile(FicheroLog, "Sent to " + str(IP_PROXY) + ":"
-                    + str(PUERTO_PROXY) + ": " + LINE)
+        WriteinFile(FicheroLog, "Sent to " + str(IP_PROXY) + ":" +
+                    str(PUERTO_PROXY) + ": " + LINE)
         print("Enviando:\r\n" + LINE)
         my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 
@@ -79,8 +79,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
             LINE = "ACK sip:" + OPCION + " SIP/2.0\r\n"
             print("Enviando:\r\n" + LINE)
             my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-            os.system("./mp32rtp -i " + IP_SERVER + " -p" + 
-                        PUERTO_RTP_INVITADO + " < " + fichero_audio)
+            aEjecutar = "./mp32rtp -i 127.0.0.1 -p "
+            aEjecutar = aEjecutar + PUERTO_RTP_INVITADO
+            aEjecutar = aEjecutar + " < " + fichero_audio
+            os.system(aEjecutar)
             print('Starting rtp transmission...')
     except ConnectionRefusedError:
         WriteinFile(FicheroLog, "Error: No server listening at " +

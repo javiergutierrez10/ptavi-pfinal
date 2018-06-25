@@ -223,6 +223,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         else:
             self.wfile.write(b"SIP/2.0 400 Bad Request\r\n")
             WriteinFile(FicheroLog, "SIP/2.0 400 Bad Request")
+
     def ExpiracionClientes(self):
         gmt = time.strftime("%Y%m%d%H%M%S", time.gmtime(time.time() + 3600))
         for nombre in self.clientes:
@@ -249,6 +250,7 @@ if __name__ == "__main__":
         sys.exit("Usage: python3 uaserver.py config")
     except FileNotFoundError:
         sys.exit("El archivo: " + sys.argv[1] + " no existe")
+
     serv = socketserver.UDPServer((IP_PR, PUERTO_PR), SIPRegisterHandler)
 
     print("Server " + NAME_PR + " listening at port " + str(PUERTO_PR))
